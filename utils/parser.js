@@ -2,7 +2,7 @@ var response = [];
 
 // Módulo para transformar json em um  array
 exports.handleString = function (code) {
-
+    // console.log(code.code);
     // Variavel que armazena as linhas
     var line = '';
 

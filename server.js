@@ -5,10 +5,13 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/', function(req, res) {
-    code  = req.query.code;
+app.post('/parser', function(req, res) {
+    codePost = req.body;
     
-    var codeArray = parser.handleString(code);
+    // console.log(code);
+
+    //Passando o json, acessando o codigo que foi enviado
+    var codeArray = parser.handleString(codePost.code);
 
     res.status(201).send('Recebido!');
 
