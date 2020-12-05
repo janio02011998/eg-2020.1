@@ -12,8 +12,7 @@ app.post('/parser', function(req, res) {
 
     //Passando o json, acessando o codigo que foi enviado
     var codeArray = parser.handleString(codePost.code);
-    parser.identifierC(codeArray);
-    res.status(201).send('Recebido!');
+    res.status(201).send(parser.identifierC(codeArray));
 
 });
 

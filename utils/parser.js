@@ -183,5 +183,5 @@ exports.identifierC = function (code) {
     }
     console.log(matriz_def);
 
-    return;
+    return matriz_def;
 }
