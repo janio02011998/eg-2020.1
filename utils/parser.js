@@ -37,6 +37,9 @@ var linha_com_definicoes = ' ';
 // Matriz com as definições
 var matriz_def = [];
 
+// Matriz com as definições
+var matriz_chave_valor = [];
+
 // Módulo para transformar json em um  array
 exports.handleString = function (code) {
     // console.log(code.code);
@@ -143,45 +146,56 @@ exports.identifierC = function (code) {
         linha_com_definicoes = linha_com_definicoes.concat("/*"+count+"*/  ");
         for (var i = 0; i < linha_da_matriz.length; i++) {
             // console.log(linha_da_matriz);
-
+                var chave_valor = [];
                 if (reserved_word.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' palavra_reservada ');
+                    chave_valor.push("palavra_reservada", linha_da_matriz[i])
                 }
                 if (parentheses.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("parentheses", linha_da_matriz[i])
                 }
                 if (variable.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' variavel ');
+                    chave_valor.push("variable", linha_da_matriz[i])
                 } 
                 if (number.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' number ');
+                    chave_valor.push("number", linha_da_matriz[i])
                 } 
                
                 if (chaves.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("chaves", linha_da_matriz[i])
                 }
                 if (name_function.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' function ');
+                    chave_valor.push("name_function", linha_da_matriz[i])
                 }
                 if (assignment.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("assignment", linha_da_matriz[i])
                 }
                 if (comparation.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("comparation", linha_da_matriz[i])
                 }
                 if (operacoes.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("operacoes", linha_da_matriz[i])
                 }
+                matriz_chave_valor.push(chave_valor);
             }
         
         matriz_def.push(linha_com_definicoes);
+        // matriz_def.push();
         linha_com_definicoes = '';
     }
-    console.log(matriz_def);
+    // console.log(matriz_def);
 
     return matriz_def;
 }
