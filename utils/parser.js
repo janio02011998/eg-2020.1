@@ -105,7 +105,7 @@ exports.identifierC = function (code) {
         for (var j = 0; j < aux.length; j++) {
             // console.log(aux[j]);
 
-            if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if') {
+            if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' ) {
                 if (reserved_word.indexOf(aux[j]) < 0) {
                     reserved_word.push(aux[j]);
                 }
