@@ -37,7 +37,11 @@ var linha_com_definicoes = ' ';
 // Matriz com as definições
 var matriz_def = [];
 
-// Matriz com as definições
+// Matriz com estrutura chave_valor 
+// Ex: 
+// [
+//  [tipo, valor ] // Onde tipo consiste em (palavra reservada, comparações etc... e valor trata do valor da linha.).
+// ]
 var matriz_chave_valor = [];
 
 // Módulo para transformar json em um  array
@@ -192,10 +196,10 @@ exports.identifierC = function (code) {
             }
         
         matriz_def.push(linha_com_definicoes);
-        // matriz_def.push();
         linha_com_definicoes = '';
     }
-    // console.log(matriz_def);
-
-    return matriz_def;
+    
+    // Retorno chave_valor;
+    return matriz_chave_valor;
+    // return matriz_def;
 }
