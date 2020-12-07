@@ -92,7 +92,7 @@ exports.identifierC = function (code) {
     // entrada => 'int main (int c, int v) { }
     // retorna => ['int', 'main', '(', 'int', 'c', 'int', 'v', ')', '{', '}' ].
     for (var i = 0; i < code.length; i++) {
-        arrayOfString.push(code[i].replace(/\(/g, "( ").replace(/\)/g, " ) ").split(/[\s]+/));
+        arrayOfString.push(code[i].replace(/\(/g, "( ").replace(/\)/g, " ) ").replace(';', '').split(/[\s]+/));
     }
 
     // A estrutura abaixo pecorre a matriz do código palava por palavra.
@@ -200,6 +200,7 @@ exports.identifierC = function (code) {
     }
     
     // Retorno chave_valor;
+    console.log(matriz_chave_valor);
     return matriz_chave_valor;
 
     //Retorno com a matriz com definições
