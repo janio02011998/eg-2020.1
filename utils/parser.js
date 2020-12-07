@@ -201,5 +201,7 @@ exports.identifierC = function (code) {
     
     // Retorno chave_valor;
     return matriz_chave_valor;
+
+    //Retorno com a matriz com definições
     // return matriz_def;
 }
