@@ -28,6 +28,12 @@ var comparation = [];
 //Váriavel que armazena os nomes de funções do código;
 var name_function = [];
 
+//Váriavel que armazena as operacoes logicas;
+var logicOperation = [];
+
+//Variavel para contagem de p-use;
+var pUseCount = 0;
+
 //Váriavel que armazena as operacoes matematica;
 var operacoes = [];
 
@@ -105,7 +111,9 @@ exports.identifierC = function (code) {
         for (var j = 0; j < aux.length; j++) {
             // console.log(aux[j]);
 
-            if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' ) {
+            if (aux[j] == 'while' || aux[j] == 'if') { pUseCount += 1; } //Contando p-use
+
+            if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' || aux[j] == 'for' ) {
                 if (reserved_word.indexOf(aux[j]) < 0) {
                     reserved_word.push(aux[j]);
                 }
@@ -116,6 +124,10 @@ exports.identifierC = function (code) {
             } else if (aux[j] == '+' || aux[j] == '-' || aux[j] == '/' || aux[j] == '*') {
                 if (operacoes.indexOf(aux[j]) < 0) {
                     operacoes.push(aux[j]);
+                }
+            } else if (aux[j] == '||' || aux[j] == '&&' || aux[j] == '!') {
+                if (logicOperation.indexOf(aux[j]) < 0) {
+                    logicOperation.push(aux[j]);
                 }
             } else if (aux[j] == '{' || aux[j] == '}') {
                 if (chaves.indexOf(aux[j]) < 0) {
@@ -184,6 +196,10 @@ exports.identifierC = function (code) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     chave_valor.push("assignment", linha_da_matriz[i])
                 }
+                if (logicOperation.includes(linha_da_matriz[i])) {
+                    linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("OperacaoLogica", linha_da_matriz[i])
+                }
                 if (comparation.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     chave_valor.push("comparation", linha_da_matriz[i])
@@ -201,6 +217,7 @@ exports.identifierC = function (code) {
     
     // Retorno chave_valor;
     console.log(matriz_chave_valor);
+    console.log (`Temos ${pUseCount} p-use`);
     return matriz_chave_valor;
 
     //Retorno com a matriz com definições
