@@ -43,6 +43,15 @@ var linha_com_definicoes = ' ';
 // Matriz com as definições
 var matriz_def = [];
 
+//Variaveis Caso teste
+var tam = 5;
+var esq = 0;
+var dir = tam-1;
+var pUse = 0;
+var mid = (esq + dir)/2;
+var v = [10, 20, 30, 40, 50];
+valor = 40;
+
 // Matriz com estrutura chave_valor 
 // Ex: 
 // [
@@ -112,6 +121,24 @@ exports.identifierC = function (code) {
             // console.log(aux[j]);
 
             if (aux[j] == 'while' || aux[j] == 'if') { pUseCount += 1; } //Contando p-use
+            
+            //*********   Parte do codigo que vai realizar o calculo do M(p-uso)    esquerda + operadorlogico + direita + resultado da operaçao
+            if (aux[j] == '>=') {  
+                pUse = pUse + esq + 62 + 61 + dir + (esq>=dir);
+            }
+            if (aux[j] == '<=') {
+                pUse = pUse + esq + 60 + 61 + dir + (esq<=dir);
+            }
+            if (aux[j] == '=='){
+                pUse = pUse + v[mid] + 61 + 61 + valor + (esq==dir);
+            } 
+            if (aux[j] == '<' ){
+                pUse = pUse + v[mid] + 60 + valor + (esq<dir);
+            }
+            if (aux[j] == '>'){
+                pUse = pUse + esq + 62 + dir + (esq>dir);
+            }                    
+            //********* Fim da parte do calculo do M(p-uso)
 
             if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' || aux[j] == 'for' ) {
                 if (reserved_word.indexOf(aux[j]) < 0) {
@@ -140,7 +167,7 @@ exports.identifierC = function (code) {
             } else if (parseInt(aux[j]) >= 0 || parseInt(aux[j]) <= 0  ) { 
                 number.push(aux[j]);
             
-            } else if (aux[j] == '>=' || aux[j] == '<=' || aux[j] == '==' || aux[j] == '<' || aux[j] == '>') {
+            } else if (aux[j] == '>=' || aux[j] == '<=' || aux[j] == '==' || aux[j] == '<' || aux[j] == '>') {  //verificando as operações logicas
                 comparation.push(aux[j]);
             } else if (aux[j + 1] == '(') {
                 name_function.push(aux[j]);
@@ -216,8 +243,9 @@ exports.identifierC = function (code) {
     }
     
     // Retorno chave_valor;
+    
     console.log(matriz_chave_valor);
-    console.log (`Temos ${pUseCount} p-use`);
+    console.log (`Calculo P-uso: ${pUse}`);
     return matriz_chave_valor;
 
     //Retorno com a matriz com definições
