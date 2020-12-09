@@ -44,6 +44,52 @@ var matriz_def = [];
 // ]
 var matriz_chave_valor = [];
 
+// Array de variáveis
+// {
+//     identificador: ,
+//     tipo: ,
+//     def: ,
+//     ultimoUso: ,
+//     valor: ,
+// }
+var variaveis = []
+
+const isDef = function(matriz_chave_valor, i){
+    if (matriz_chave_valor[i][2] == "int" || matriz_chave_valor[i][2] == "float" || matriz_chave_valor[i][2] == "char"){
+        if (matriz_chave_valor[i+1][1] == "variable") return true;
+    }
+    return false;
+}
+
+const isAttr = function(matriz_chave_valor, i){
+    if (matriz_chave_valor[i+1][1] == 'assignment'){
+        return true;
+    }
+    return false;
+}
+
+// const getAttr = function(matriz_chave_valor, linha, start_index){
+//     let i = 0;
+//     while(matriz_chave_valor[start_index + i][0] == linha){
+//         if (matriz_chave_valor[start_index + i][1] == "variable"){
+//             if (matriz_chave_valor[start_index + i + 1] == "assignment"){
+
+//             }
+//         }
+//     }
+// }
+
+const calcCUse = function(matriz_chave_valor, linha, start_index){
+    let i = 0
+    console.log("Start -------------------------------");
+    while(matriz_chave_valor[start_index + i][0] == linha){
+        console.log("C-Use", matriz_chave_valor[start_index + i]);
+        if (matriz_chave_valor.length-1 == start_index + i + 1) break;
+        else i++;
+    }
+    console.log("End -------------------------------");
+}
+
 // Módulo para transformar json em um  array
 exports.handleString = function (code) {
     // console.log(code.code);
@@ -151,6 +197,7 @@ exports.identifierC = function (code) {
         for (var i = 0; i < linha_da_matriz.length; i++) {
             // console.log(linha_da_matriz);
                 var chave_valor = [];
+                chave_valor.push(count+1);
                 if (reserved_word.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' palavra_reservada ');
@@ -200,9 +247,52 @@ exports.identifierC = function (code) {
     }
     
     // Retorno chave_valor;
-    console.log(matriz_chave_valor);
+    // console.log(matriz_chave_valor);
+    console.log("Variáveis: ", variable);
     return matriz_chave_valor;
 
     //Retorno com a matriz com definições
     // return matriz_def;
+}
+
+exports.teste = function(matriz_chave_valor) {
+    let linha = 1;
+    // let line = [];
+    // let i = 0;
+
+    const lastLine = matriz_chave_valor[matriz_chave_valor.length-1][0];
+    console.log("Lastline: ", lastLine);
+
+    // while(linha == matriz_chave_valor[i][0]){
+    //     const v = []
+    //     v.push(matriz_chave_valor[i][1])
+    //     v.push(matriz_chave_valor[i][2])
+    //     line.push(v)
+    //     i++;
+    // }
+    let last_i = 0;
+    while(linha <= lastLine){
+        let i;
+        let isCUse = false;
+        for (i = last_i; linha == matriz_chave_valor[i][0]; i++){
+            console.log(matriz_chave_valor[i]);
+            if (i == matriz_chave_valor.length-1) break;
+
+            // fazer o parser aqui
+            if (isDef(matriz_chave_valor, i)){
+                // console.log(`Def na linha ${linha}: ${matriz_chave_valor[i][2]} ${matriz_chave_valor[i+1][2]}`);
+                if (isAttr(matriz_chave_valor, i+1)){
+                    isCUse = true;
+                    // console.log(`Var ${matriz_chave_valor[i][2]} também possui atribuição com o valor ${matriz_chave_valor[i+2][2]}!`);
+                }
+            }
+            else if (isAttr(matriz_chave_valor, i)) isCUse = true;
+        }
+        if (isCUse) calcCUse(matriz_chave_valor, linha, last_i)
+        console.log("\n");
+
+        // Faz um update na linha
+        last_i = i;
+        linha++;
+    }
 }
