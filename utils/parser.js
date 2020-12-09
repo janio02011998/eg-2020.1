@@ -290,7 +290,6 @@ exports.teste = function(matriz_chave_valor) {
         }
         if (isCUse) calcCUse(matriz_chave_valor, linha, last_i)
         console.log("\n");
-
         // Faz um update na linha
         last_i = i;
         linha++;
