@@ -154,43 +154,43 @@ exports.identifierC = function (code) {
                 if (reserved_word.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' palavra_reservada ');
-                    chave_valor.push("palavra_reservada", linha_da_matriz[i])
+                    chave_valor.push("palavra_reservada", linha_da_matriz[i], count);
                 }
                 if (parentheses.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
-                    chave_valor.push("parentheses", linha_da_matriz[i])
+                    chave_valor.push("parentheses", linha_da_matriz[i], count);
                 }
                 if (variable.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' variavel ');
-                    chave_valor.push("variable", linha_da_matriz[i])
+                    chave_valor.push("variable", linha_da_matriz[i], count);
                 } 
                 if (number.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' number ');
-                    chave_valor.push("number", linha_da_matriz[i])
+                    chave_valor.push("number", linha_da_matriz[i], count);
                 } 
                
                 if (chaves.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
-                    chave_valor.push("chaves", linha_da_matriz[i])
+                    chave_valor.push("chaves", linha_da_matriz[i], count);
                 }
                 if (name_function.includes(linha_da_matriz[i])) {
                     // linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     linha_com_definicoes = linha_com_definicoes.concat(' function ');
-                    chave_valor.push("name_function", linha_da_matriz[i])
+                    chave_valor.push("name_function", linha_da_matriz[i], count);
                 }
                 if (assignment.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
-                    chave_valor.push("assignment", linha_da_matriz[i])
+                    chave_valor.push("assignment", linha_da_matriz[i], count);
                 }
                 if (comparation.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
-                    chave_valor.push("comparation", linha_da_matriz[i])
+                    chave_valor.push("comparation", linha_da_matriz[i], count);
                 }
                 if (operacoes.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
-                    chave_valor.push("operacoes", linha_da_matriz[i])
+                    chave_valor.push("operacoes", linha_da_matriz[i], count);
                 }
                 matriz_chave_valor.push(chave_valor);
             }
