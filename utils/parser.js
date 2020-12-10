@@ -54,6 +54,15 @@ var matriz_chave_valor = [];
 // }
 var variaveis = []
 
+// Array de objetos com os valores de w, d e c
+// {
+//     w: [],
+//     d: [],
+//     c: [],
+// }
+var c_uso = []
+
+// Entrada: | tipo var |
 const isDef = function(matriz_chave_valor, i){
     if (matriz_chave_valor[i][2] == "int" || matriz_chave_valor[i][2] == "float" || matriz_chave_valor[i][2] == "char"){
         if (matriz_chave_valor[i+1][1] == "variable") return true;
@@ -61,33 +70,108 @@ const isDef = function(matriz_chave_valor, i){
     return false;
 }
 
+// Entrada: | tipo var |
+const parseDef = function(matriz_chave_valor, i){
+    if (matriz_chave_valor[i][1] == "variable"){
+        variaveis.push({
+            name: matriz_chave_valor[i][2],
+            value: 0,
+        })
+    }
+}
+
+// Entrada: | var '=' ...|
 const isAttr = function(matriz_chave_valor, i){
-    if (matriz_chave_valor[i+1][1] == 'assignment'){
+    if (matriz_chave_valor[i][1] == "variable" && matriz_chave_valor[i+1][1] == 'assignment'
+    && (matriz_chave_valor[i+2][1] == "variable" || matriz_chave_valor[i+2][1] == "number" || (matriz_chave_valor[i+2][2] == "-" && matriz_chave_valor.length-1 >= i+3))){
         return true;
     }
     return false;
 }
 
-// const getAttr = function(matriz_chave_valor, linha, start_index){
-//     let i = 0;
-//     while(matriz_chave_valor[start_index + i][0] == linha){
-//         if (matriz_chave_valor[start_index + i][1] == "variable"){
-//             if (matriz_chave_valor[start_index + i + 1] == "assignment"){
+// Entrada: | var '=' ...|
+const parseEqu = function(matriz_chave_valor, i){
+    let value = '';
+    let next_i;
+    let v = '';
+    if (matriz_chave_valor[i + 2][2] == "-") {
+        if (matriz_chave_valor[i + 3][1] == "variable"){
+            for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[i + 3][2]) v = variaveis[j].value;
+            value += matriz_chave_valor[i+2][2] + v;
+        } else
+            value += matriz_chave_valor[i+2][2] + matriz_chave_valor[i+3][2]
+        next_i = i + 4;
+    } else {
+        if (matriz_chave_valor[i + 2][1] == "variable"){
+            for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[i + 2][2].replace('-','')) v = variaveis[j].value;
+            if (matriz_chave_valor[i + 2][2].startsWith('-'))
+                value = '-' + v;
+            else
+                value = v; 
+        } else
+            value = matriz_chave_valor[i+2][2];
+        next_i = i + 3;
+    }
+    value += ' ';
+    
+    if (matriz_chave_valor.length-1 <= next_i) {
+        for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[i][2]) variaveis[j].value = eval(value);
+        return;
+    }
 
-//             }
-//         }
-//     }
-// }
+    while(matriz_chave_valor[next_i][1] == "operacoes"){
+        if (matriz_chave_valor[next_i+1][2] == "-") {
+            if (matriz_chave_valor[next_i+2][1] == "variable"){
+                for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[next_i+2][2]) v = variaveis[j].value;
+                value += matriz_chave_valor[next_i][2] + ' ' + matriz_chave_valor[next_i+1][2] + ' ' + v;
+            } else
+                value += matriz_chave_valor[next_i][2] + ' ' + matriz_chave_valor[next_i+1][2] + ' ' + matriz_chave_valor[next_i+2][2];
+            next_i += 3;
+        } else{
+            if (matriz_chave_valor[next_i+1][1] == "variable"){
+                for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[next_i+1][2].replace('-','')) v = variaveis[j].value;
+                if (matriz_chave_valor[next_i+1][2].startsWith('-')){
+                    value += matriz_chave_valor[next_i][2] + ' ' + '-' + v;
+                } else
+                    value += matriz_chave_valor[next_i][2] + ' ' + v;
+            } else 
+                value += matriz_chave_valor[next_i][2] + ' ' + matriz_chave_valor[next_i+1][2];
+            next_i += 2;
+        }
+        if (matriz_chave_valor.length-1 <= next_i) {
+            for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[i][2]) variaveis[j].value = eval(value);
+            return;
+        }
+        value += ' '
+    }
+    for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[i][2]) variaveis[j].value = eval(value);
+    return;
+}
 
-const calcCUse = function(matriz_chave_valor, linha, start_index){
+const getCUseParams = function(matriz_chave_valor, linha, start_index){
     let i = 0
+    const line_c_uso = {
+        w: [],
+        d: [],
+        c: [],
+    }
     console.log("Start -------------------------------");
     while(matriz_chave_valor[start_index + i][0] == linha){
         console.log("C-Use", matriz_chave_valor[start_index + i]);
+        // Fazer povoamento do w, d e c aqui
+        if (matriz_chave_valor[start_index + i][1] == "variable") {
+            let v;
+            for (let j in variaveis) if (variaveis[j].name == matriz_chave_valor[start_index + i][2]) v = variaveis[j].value;
+            line_c_uso.w.push(v); //.trim() ?
+        }
+        if (matriz_chave_valor[start_index + i][1] == "operacoes" || matriz_chave_valor[start_index + i][1] == "assignment") line_c_uso.d.push(matriz_chave_valor[start_index + i][2]);
+        if (matriz_chave_valor[start_index + i][1] == "number") line_c_uso.c.push(matriz_chave_valor[start_index + i][2]);
+
         if (matriz_chave_valor.length-1 == start_index + i + 1) break;
         else i++;
     }
     console.log("End -------------------------------");
+    return line_c_uso;
 }
 
 // Módulo para transformar json em um  array
@@ -255,7 +339,7 @@ exports.identifierC = function (code) {
     // return matriz_def;
 }
 
-exports.teste = function(matriz_chave_valor) {
+exports.parseCUse = function(matriz_chave_valor) {
     let linha = 1;
     // let line = [];
     // let i = 0;
@@ -263,13 +347,6 @@ exports.teste = function(matriz_chave_valor) {
     const lastLine = matriz_chave_valor[matriz_chave_valor.length-1][0];
     console.log("Lastline: ", lastLine);
 
-    // while(linha == matriz_chave_valor[i][0]){
-    //     const v = []
-    //     v.push(matriz_chave_valor[i][1])
-    //     v.push(matriz_chave_valor[i][2])
-    //     line.push(v)
-    //     i++;
-    // }
     let last_i = 0;
     while(linha <= lastLine){
         let i;
@@ -279,19 +356,72 @@ exports.teste = function(matriz_chave_valor) {
             if (i == matriz_chave_valor.length-1) break;
 
             // fazer o parser aqui
-            if (isDef(matriz_chave_valor, i)){
+            if (isDef(matriz_chave_valor, i)){      // Detecta se há uma estrutura '| tipo var |' na linha
+                parseDef(matriz_chave_valor, i+1);
                 // console.log(`Def na linha ${linha}: ${matriz_chave_valor[i][2]} ${matriz_chave_valor[i+1][2]}`);
-                if (isAttr(matriz_chave_valor, i+1)){
+
+                if (isAttr(matriz_chave_valor, i+1)){   // Detecta se há uma estrutura '| var '=' ... |' (Se houver, então constitui c-uso)
                     isCUse = true;
+                    parseEqu(matriz_chave_valor, i+1)
                     // console.log(`Var ${matriz_chave_valor[i][2]} também possui atribuição com o valor ${matriz_chave_valor[i+2][2]}!`);
                 }
             }
-            else if (isAttr(matriz_chave_valor, i)) isCUse = true;
+            else if (isAttr(matriz_chave_valor, i)) {   // Detecta se há uma estrutura '| var '=' ... |' (Se houver, então constitui c-uso)
+                isCUse = true;
+                parseEqu(matriz_chave_valor, i);
+            }
         }
-        if (isCUse) calcCUse(matriz_chave_valor, linha, last_i)
+        if (isCUse) c_uso.push(getCUseParams(matriz_chave_valor, linha, last_i));
         console.log("\n");
         // Faz um update na linha
         last_i = i;
         linha++;
     }
+    console.log(variaveis);
+    console.log(c_uso);
+    return c_uso;
+}
+
+exports.calcCUse = function(c_use_params){
+    let s = []
+    let s1, s2, s3;
+    for (param of c_use_params){
+        if (param.w.length > 0)
+            s1 = param.w.reduce((acc, value) => {
+                let v = 0;
+                if (typeof value == "string") {
+                    for (let char of value) v += parseInt(char.charCodeAt(0), 10);
+                    v += acc;
+                }
+                if (typeof value == "number") v = acc + value;
+                return v;
+            });
+        else
+            s1 = 0;
+        if (param.d.length > 0)
+            s2 = param.d.reduce((acc, value) => typeof value == "number" ? acc + value : acc + value.charCodeAt(0), 0)
+        else
+            s2 = 0;
+        if (param.c.length > 0)
+            s3 = param.c.reduce((acc, value) => {
+                let v = 0;
+                if (typeof value == "string") {
+                    for (let char of value) v += parseInt(char.charCodeAt(0), 10);
+                    v += acc;
+                }
+                if (typeof value == "number") v = acc + value;
+                return v;
+            });
+        else
+            s3 = 0;
+        s.push(s1 + s2 + s3)
+    }
+
+    let count = 0
+    let sumTotal = 0
+    s.forEach((sum) => {
+        console.log("Linha: ", c_use_params[count]);
+        console.log(`Soma ${++count}: ${sum.toString(16)}\n`);
+        sumTotal += sum;
+    })
 }

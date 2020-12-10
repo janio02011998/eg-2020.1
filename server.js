@@ -11,9 +11,11 @@ app.post('/parser', function(req, res) {
     //Passando o json, acessando o codigo que foi enviado
     var codeArray = parser.handleString(codePost.code);
     var codeArray2 = parser.identifierC(codeArray);
-    console.log(codeArray2);
-    var codeArray3 = parser.teste(codeArray2);
-    
+    var c_use_params = parser.parseCUse(codeArray2);
+    console.log(c_use_params);
+    var c_use = parser.calcCUse(c_use_params);
+    console.log(c_use);
+
     // Cálculo do uso-c aqui
     // Cálculo do uso-p aqui
     // Mais o que for necessário
