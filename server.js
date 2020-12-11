@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const parser = require('./utils/parser');
 
-const app = express();
+const app = require('express')();
 
 app.use(express.json());
+app.use(cors());
 
 app.post('/parser', function(req, res) {
     codePost = req.body;
