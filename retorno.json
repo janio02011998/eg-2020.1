@@ -1,0 +1,40 @@
+{
+    "cUso": {
+        "variaveis": [
+            {
+                "identificador": "cont",
+                "tipo": "int",
+                "def": 2,
+                "ultimoUso": 23,
+                "valor": 17
+            },
+            {
+                "identificador": "resultado",
+                "tipo": "int",
+                "def": 3,
+                "ultimoUso": 25,
+                "valor": 30
+            }
+        ],
+        "total": 47
+    },
+    "pUso": {
+        "variaveis": [
+            {
+                "identificador": "cont",
+                "tipo": "int",
+                "def": 2,
+                "ultimoUso": 23,
+                "valor": 17
+            },
+            {
+                "identificador": "resultado",
+                "tipo": "int",
+                "def": 3,
+                "ultimoUso": 25,
+                "valor": 30
+            }
+        ],
+        "total": 47
+    }
+}
