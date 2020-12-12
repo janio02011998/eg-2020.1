@@ -6,7 +6,7 @@ const lines = [{
 {
     w: [0, 0, 4, 5],
     d: ['=','=','-'], // '>=', '<=', '==', '!=', etc devem ocupar índices separados
-    c: [1],
+    c: [0, 1],
 },
 {
     w: [2, 0, 4],
