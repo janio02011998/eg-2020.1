@@ -1,20 +1,18 @@
-# Project Title
-
-Parser
+# Project Title: Parser
 
 ## Description
 
 Parser para reconhecimento de uma função em linguagem c.
 
 possui 4 branchs: 
-
+<p>
 1 main -> merge dos branchs 2 e 3, além do código base parser base usado para criação dos branch 2 e 3.
 2 c_uso -> codígo com as funcionalideades para c_uso. 
 3 p-useCount -> funcionalidades de contagem de p-uso. (OBS: apresenta erros).
 4 integracao_c-p_uso -> merge dos branch 2 e 3 para debug e teste. 
-
+</p>
 ## Getting Started
-
+<p>
 git clone https://github.com/janio02011998/eg-2020.1.git
 npm install
 npm start 
@@ -25,9 +23,9 @@ com o campo de envio de dados com json com seguinte texto:
 {
 "code":"int buscaBin (int valor, int tam, int v[]) {  int esq = 0, mid, dir = tam - 1;  while (esq <= dir) {  mid = (esq + dir) / 2; if (v[mid] == valor) return mid;   if (v[mid] < valor)  esq = mid + 1;  else  dir = mid - 1; }   return -1; } "
 }
-
-## Saída esperada no terminal
-
+</p>
+### Saída esperada no terminal
+```
 [
   [ 1, 'palavra_reservada', 'int', 0 ], 
   [ 1, 'name_function', 'buscaBin', 0 ],
@@ -96,12 +94,16 @@ com o campo de envio de dados com json com seguinte texto:
   [ 9, 'number', '-1', 8 ],
   [ 10, 'chaves', '}', 9 ]
 ]
+
 Calculo P-uso: 449
+```
 
-# erro abaixo das funcionalidades de c_uso
+#### erro abaixo das funcionalidades de c_uso
 
+```
 SyntaxError: Unexpected end of input 
     at parseEqu (C:\Users\Janio\OneDrive\Área de Trabalho\Myprojects\Javascript\www\serverParser\utils\parser.js:218:40)
     at Object.exports.parseCUse (C:\Users\Janio\OneDrive\Área de Trabalho\Myprojects\Javascript\www\serverParser\utils\parser.js:472:21)
     at C:\Users\Janio\OneDrive\Área de Trabalho\Myprojects\Javascript\www\serverParser\server.js:16:31
     at Layer.handle [as handle_request] (C:\Users\Janio\OneDrive\Área de Trabalho\Myprojects\Javascript\www\serverParser\node_modules\express\lib\router\layer.js:95:5)
+```
