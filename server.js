@@ -21,7 +21,7 @@ app.post('/parser', function(req, res) {
     // Cálculo do uso-c aqui
     // Cálculo do uso-p aqui
     // Mais o que for necessário
-    const out = require("retorno.json");
+    const out = require('./retorno.json');
     res.status(201).send(out);
 });
 
