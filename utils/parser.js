@@ -28,6 +28,12 @@ var comparation = [];
 //Váriavel que armazena os nomes de funções do código;
 var name_function = [];
 
+//Váriavel que armazena as operacoes logicas;
+var logicOperation = [];
+
+//Variavel para contagem de p-use;
+var pUseCount = 0;
+
 //Váriavel que armazena as operacoes matematica;
 var operacoes = [];
 
@@ -36,6 +42,15 @@ var linha_com_definicoes = ' ';
 
 // Matriz com as definições
 var matriz_def = [];
+
+//Variaveis Caso teste realizado
+var tam = 5;
+var esq = 0;
+var dir = tam-1;
+var pUse = 0;
+var mid = (esq + dir)/2;
+var v = [10, 20, 30, 40, 50];
+valor = 40;
 
 // Matriz com estrutura chave_valor 
 // Ex: 
@@ -105,30 +120,56 @@ exports.identifierC = function (code) {
         for (var j = 0; j < aux.length; j++) {
             // console.log(aux[j]);
 
-            if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' ) {
+            if (aux[j] == 'while' || aux[j] == 'if') { pUseCount += 1; } //Contando p-use
+            
+            //*********   Parte do codigo que vai realizar o calculo do M(p-uso)    esquerda + operadorlogico + direita + resultado da operaçao 
+            // O calculo esta sendo feito em decimal para depois ser transformado em hexadeciaml apois a soma com o calculo realizado com o c-uso)
+            // O calculo foi baseado na equação de p-uso: 
+            if (aux[j] == '>=') {  
+                pUse = pUse + esq + 62 + 61 + dir + (esq>=dir);
+            }
+            if (aux[j] == '<=') {
+                pUse = pUse + esq + 60 + 61 + dir + (esq<=dir);
+            }
+            if (aux[j] == '=='){
+                pUse = pUse + v[mid] + 61 + 61 + valor + (esq==dir);
+            } 
+            if (aux[j] == '<' ){
+                pUse = pUse + v[mid] + 60 + valor + (esq<dir);
+            }
+            if (aux[j] == '>'){
+                pUse = pUse + esq + 62 + dir + (esq>dir);
+            }                    
+            //********* Fim da parte do calculo do M(p-uso)
+
+            if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' || aux[j] == 'for' ) { //verificando as palavras reservadas
                 if (reserved_word.indexOf(aux[j]) < 0) {
                     reserved_word.push(aux[j]);
                 }
-            } else if (aux[j] == '(' || aux[j] == ')') {
+            } else if (aux[j] == '(' || aux[j] == ')') { //verificando parenteses
                 if (parentheses.indexOf(aux[j]) < 0) {
                     parentheses.push(aux[j]);
                 }
-            } else if (aux[j] == '+' || aux[j] == '-' || aux[j] == '/' || aux[j] == '*') {
+            } else if (aux[j] == '+' || aux[j] == '-' || aux[j] == '/' || aux[j] == '*') { //verificando as operações aritimeticas
                 if (operacoes.indexOf(aux[j]) < 0) {
                     operacoes.push(aux[j]);
                 }
-            } else if (aux[j] == '{' || aux[j] == '}') {
+            } else if (aux[j] == '||' || aux[j] == '&&' || aux[j] == '!') {   //verificando as preposições logicas
+                if (logicOperation.indexOf(aux[j]) < 0) {
+                    logicOperation.push(aux[j]);
+                }
+            } else if (aux[j] == '{' || aux[j] == '}') { //verificando as chaves
                 if (chaves.indexOf(aux[j]) < 0) {
                     chaves.push(aux[j]);
                 }
-            } else if (aux[j] == '=') {
+            } else if (aux[j] == '=') {  //verificando igualdade
                 if (assignment.indexOf(aux[j]) < 0) {
                     assignment.push(aux[j]);
                 }
             } else if (parseInt(aux[j]) >= 0 || parseInt(aux[j]) <= 0  ) { 
                 number.push(aux[j]);
             
-            } else if (aux[j] == '>=' || aux[j] == '<=' || aux[j] == '==' || aux[j] == '<' || aux[j] == '>') {
+            } else if (aux[j] == '>=' || aux[j] == '<=' || aux[j] == '==' || aux[j] == '<' || aux[j] == '>') {  //verificando os operadores logicos
                 comparation.push(aux[j]);
             } else if (aux[j + 1] == '(') {
                 name_function.push(aux[j]);
@@ -184,6 +225,10 @@ exports.identifierC = function (code) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     chave_valor.push("assignment", linha_da_matriz[i], count);
                 }
+                if (logicOperation.includes(linha_da_matriz[i])) {
+                    linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
+                    chave_valor.push("OperacaoLogica", linha_da_matriz[i])
+                }
                 if (comparation.includes(linha_da_matriz[i])) {
                     linha_com_definicoes = linha_com_definicoes.concat(linha_da_matriz[i]+ ' ');
                     chave_valor.push("comparation", linha_da_matriz[i], count);
@@ -200,7 +245,9 @@ exports.identifierC = function (code) {
     }
     
     // Retorno chave_valor;
+    
     console.log(matriz_chave_valor);
+    console.log (`Calculo P-uso: ${pUse}`); //retorna o valor da equação total de p-uso
     return matriz_chave_valor;
 
     //Retorno com a matriz com definições
