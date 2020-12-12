@@ -77,6 +77,7 @@ var logicOperation = [];
 var pUseCount = 0;
 
 // Entrada: | tipo var |
+// Testa corretamente se é um definição
 const isDef = function(matriz_chave_valor, i) {
     if (matriz_chave_valor[i][2] == "int" || matriz_chave_valor[i][2] == "float" || matriz_chave_valor[i][2] == "char") {
         if (matriz_chave_valor[i+1][1] == "variable") {
@@ -87,7 +88,8 @@ const isDef = function(matriz_chave_valor, i) {
 }
 
 // Entrada: | tipo var |
-const parseDef = function(matriz_chave_valor, i) {
+// Faz parse de definição e adiciona na lista de variaveis
+const parseDef = function(matriz_chave_valor, i) {  
     if (matriz_chave_valor[i][1] == "variable") {
         variaveis.push({
             name: matriz_chave_valor[i][2],
@@ -97,6 +99,7 @@ const parseDef = function(matriz_chave_valor, i) {
 }
 
 // Entrada: | var '=' ...|
+// Testa se está havendo uma atribuição numa variavel corretamente
 const isAttr = function(matriz_chave_valor, i){
     if (matriz_chave_valor[i][1] == "variable" && matriz_chave_valor[i+1][1] == 'assignment'
     && (matriz_chave_valor[i+2][1] == "variable" || matriz_chave_valor[i+2][1] == "number" || (matriz_chave_valor[i+2][2] == "-" && matriz_chave_valor.length-1 >= i+3))){
@@ -106,6 +109,7 @@ const isAttr = function(matriz_chave_valor, i){
 }
 
 // Entrada: | var '=' ...|
+//TODO: Comentar
 const parseEqu = function(matriz_chave_valor, i){
     let value = '';
     let next_i;
@@ -199,7 +203,7 @@ const parseEqu = function(matriz_chave_valor, i){
 }
 
 const getCUseParams = function(matriz_chave_valor, linha, start_index){
-    let i = 0
+    let i = 0;
     const line_c_uso = {
         w: [],
         d: [],
@@ -319,34 +323,34 @@ exports.identifierC = function (code) {
             //********* Fim da parte do calculo do M(p-uso)
 
             if (aux[j] == 'int' || aux[j] == 'while' || aux[j] == 'return' || aux[j] == 'else' || aux[j] == 'if' || aux[j] == 'main' || aux[j] == 'do' || aux[j] == 'float' || aux[j] == 'for') {
-                if (reserved_word.indexOf(aux[j]) < 0) {
+                if (reserved_word.indexOf(aux[j]) < 0) {    // Testa se a palavra é reservada
                     reserved_word.push(aux[j]);
                 }
-            } else if (aux[j] == '(' || aux[j] == ')') {
+            } else if (aux[j] == '(' || aux[j] == ')') {    // Testa se é um parentese
                 if (parentheses.indexOf(aux[j]) < 0) {
                     parentheses.push(aux[j]);
                 }
-            } else if (aux[j] == '+' || aux[j] == '-' || aux[j] == '/' || aux[j] == '*') {
+            } else if (aux[j] == '+' || aux[j] == '-' || aux[j] == '/' || aux[j] == '*') {  // Testa se é um operador
                 if (operacoes.indexOf(aux[j]) < 0) {
                     operacoes.push(aux[j]);
                 }
-            } else if (aux[j] == '||' || aux[j] == '&&' || aux[j] == '!') {
+            } else if (aux[j] == '||' || aux[j] == '&&' || aux[j] == '!') { // Testa se é um operador lógico
                 if (logicOperation.indexOf(aux[j]) < 0) {
                     logicOperation.push(aux[j]);
                 }
-            } else if (aux[j] == '{' || aux[j] == '}') {
+            } else if (aux[j] == '{' || aux[j] == '}') {    // Testa se é uma chave
                 if (chaves.indexOf(aux[j]) < 0) {
                     chaves.push(aux[j]);
                 }
-            } else if (aux[j] == '=') {
+            } else if (aux[j] == '=') {                     // Testa se é um operador de atribuição
                 if (assignment.indexOf(aux[j]) < 0) {
                     assignment.push(aux[j]);
                 }
-            } else if (parseInt(aux[j]) >= 0 || parseInt(aux[j]) <= 0  ) { 
+            } else if (parseInt(aux[j]) >= 0 || parseInt(aux[j]) <= 0  ) {  // Testa se a entrada é um numero / constante
                 number.push(aux[j]);
-            } else if (aux[j] == '>=' || aux[j] == '<=' || aux[j] == '==' || aux[j] == '<' || aux[j] == '>') {
+            } else if (aux[j] == '>=' || aux[j] == '<=' || aux[j] == '==' || aux[j] == '<' || aux[j] == '>') {  // Testa se são operadores de comparação
                 comparation.push(aux[j]);
-            } else if (aux[j + 1] == '(') {
+            } else if (aux[j + 1] == '(') { // Caso especial para funções
                 name_function.push(aux[j]);
             } else {
                 if (variable.indexOf(aux[j]) < 0) {
@@ -430,6 +434,7 @@ exports.identifierC = function (code) {
     // return matriz_def;
 }
 
+// !! TODO: Comentar
 exports.parseCUse = function(matriz_chave_valor) {
     let linha = 1;
     // let line = [];
@@ -463,7 +468,7 @@ exports.parseCUse = function(matriz_chave_valor) {
                 parseEqu(matriz_chave_valor, i);
             }
         }
-        if (isCUse) {
+        if (isCUse) {   // Adiciona uma entrada no array de cUso para o front
             c_uso.push(getCUseParams(matriz_chave_valor, linha, last_i));
         }
         console.log("\n");
