@@ -19,12 +19,13 @@ possui 4 branchs:
 
 >Baixar o postman ou insomnia aberto, criar um requisição do tipo post para o endereço: http://localhost:3333/parser
 
->No campo de envio de dados com json com seguinte texto: 
+>No campo de envio de dados cole o seguinte json com seguinte texto: 
 ```
 {
 "code":"int buscaBin (int valor, int tam, int v[]) {  int esq = 0, mid, dir = tam - 1;  while (esq <= dir) {  mid = (esq + dir) / 2; if (v[mid] == valor) return mid;   if (v[mid] < valor)  esq = mid + 1;  else  dir = mid - 1; }   return -1; } "
 }
 ```
+> exemplo com imagem utilizando o insomnia encontra-se na pasta docs.
 
 ### Saída esperada no terminal
 ~~~
