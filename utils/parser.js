@@ -28,6 +28,12 @@ var comparation = [];
 //Váriavel que armazena os nomes de funções do código;
 var name_function = [];
 
+//Váriavel que armazena as operacoes logicas;
+var logicOperation = [];
+
+//Variavel para contagem de p-use;
+var pUseCount = 0;
+
 //Váriavel que armazena as operacoes matematica;
 var operacoes = [];
 
@@ -38,6 +44,8 @@ var linha_com_definicoes = ' ';
 var matriz_def = [];
 
 //Variaveis Caso Test
+//Variaveis Caso teste realizado
+
 var tam = 5;
 var esq = 0;
 var dir = tam-1;
@@ -312,11 +320,11 @@ exports.identifierC = function (code) {
         // percorrendo item a item da matriz no array aux.
         for (var j = 0; j < aux.length; j++) {
 
-            if (aux[j] == 'while' || aux[j] == 'if') {
-                 pUseCount += 1;    //Contando p-use
-            } 
-
-            //*********   Parte do codigo que vai realizar o calculo do M(p-uso)    esquerda + operadorlogico + direita + resultado da operaçao
+            if (aux[j] == 'while' || aux[j] == 'if') { pUseCount += 1; } //Contando p-use
+            
+            //*********   Parte do codigo que vai realizar o calculo do M(p-uso)    esquerda + operadorlogico + direita + resultado da operaçao 
+            // O calculo esta sendo feito em decimal para depois ser transformado em hexadeciaml apois a soma com o calculo realizado com o c-uso)
+            // O calculo foi baseado na equação de p-uso: 
             if (aux[j] == '>=') {  
                 pUse = pUse + esq + 62 + 61 + dir + (esq>=dir);
             }
@@ -431,7 +439,10 @@ exports.identifierC = function (code) {
         linha_com_definicoes = '';
     }
     
-    // Retorno chave_valor
+    // Retorno chave_valor;
+    
+    console.log(matriz_chave_valor);
+    console.log (`Calculo P-uso: ${pUse}`); //retorna o valor da equação total de p-uso
     return matriz_chave_valor;
 }
 
