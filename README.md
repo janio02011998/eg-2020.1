@@ -106,3 +106,54 @@ SyntaxError: Unexpected end of input
     at C:\Users\Janio\OneDrive\Área de Trabalho\Myprojects\Javascript\www\serverParser\server.js:16:31
     at Layer.handle [as handle_request] (C:\Users\Janio\OneDrive\Área de Trabalho\Myprojects\Javascript\www\serverParser\node_modules\express\lib\router\layer.js:95:5)
 ~~~
+
+>O treacho de código abaixo é um alternativa de teste para evitar o erro apresentado na saida acima.
+
+```
+{
+"code":" int soma(){ int a = 3; int b = 4; int c = a + b; return c; }"
+}
+```
+### Saida esperada 
+~~~
+{
+  "cUso": {
+    "variaveis": [
+      {
+        "identificador": "cont",
+        "tipo": "int",
+        "def": 2,
+        "ultimoUso": 23,
+        "valor": 17
+      },
+      {
+        "identificador": "resultado",
+        "tipo": "int",
+        "def": 3,
+        "ultimoUso": 25,
+        "valor": 30
+      }
+    ],
+    "total": 47
+  },
+  "pUso": {
+    "variaveis": [
+      {
+        "identificador": "cont",
+        "tipo": "int",
+        "def": 2,
+        "ultimoUso": 23,
+        "valor": 17
+      },
+      {
+        "identificador": "resultado",
+        "tipo": "int",
+        "def": 3,
+        "ultimoUso": 25,
+        "valor": 30
+      }
+    ],
+    "total": 47
+  }
+}
+~~~
